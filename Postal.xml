@@ -264,6 +264,13 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<OnClick>
 				Postal_Inbox_OpenSelected()
 			</OnClick>
+			<OnEnter>
+				local itemCount = Postal:CountSelectedMailItems()
+				Postal:ShowBagSpaceTooltip(this, itemCount)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
 		</Scripts>
 	</Button>
 	<Button name="PostalInboxOpenAllButton" parent="InboxFrame" inherits="UIPanelButtonTemplate" text="Open All">
@@ -281,6 +288,13 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<OnClick>
 				Postal_Inbox_OpenSelected(true)
 			</OnClick>
+			<OnEnter>
+				local itemCount = Postal:CountAllMailItems()
+				Postal:ShowBagSpaceTooltip(this, itemCount)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
 		</Scripts>
 	</Button>
 

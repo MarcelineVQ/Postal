@@ -694,3 +694,54 @@ function Postal:Inbox_Abort()
 	Postal:Inbox_DisableClicks()
 	Postal_SelectedItems = {}
 end
+
+-- Count free bag slots
+function Postal:GetFreeBagSlots()
+	local free = 0
+	for bag = 0, NUM_BAG_SLOTS do
+		local numSlots = GetContainerNumSlots(bag)
+		for slot = 1, numSlots do
+			if not GetContainerItemInfo(bag, slot) then
+				free = free + 1
+			end
+		end
+	end
+	return free
+end
+
+-- Count items in selected mail (non-COD only)
+function Postal:CountSelectedMailItems()
+	local count = 0
+	for i = 1, getn(Postal_SelectedItems) do
+		local index = Postal_SelectedItems[i]
+		local _, _, _, _, _, COD_amount, _, has_item = GetInboxHeaderInfo(index)
+		if COD_amount == 0 and has_item then
+			count = count + 1
+		end
+	end
+	return count
+end
+
+-- Count items in all non-COD mail
+function Postal:CountAllMailItems()
+	local count = 0
+	local inbox_count = GetInboxNumItems()
+	for i = 1, inbox_count do
+		local _, _, _, _, _, COD_amount, _, has_item = GetInboxHeaderInfo(i)
+		if COD_amount == 0 and has_item then
+			count = count + 1
+		end
+	end
+	return count
+end
+
+-- Show bag space tooltip
+function Postal:ShowBagSpaceTooltip(button, itemCount)
+	local freeSlots = self:GetFreeBagSlots()
+	GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+	GameTooltip:SetText(itemCount.."/"..freeSlots.." Bag Space",
+		itemCount > freeSlots and 1.0 or NORMAL_FONT_COLOR.r,
+		itemCount > freeSlots and 0.0 or NORMAL_FONT_COLOR.g,
+		itemCount > freeSlots and 0.0 or NORMAL_FONT_COLOR.b)
+	GameTooltip:Show()
+end
