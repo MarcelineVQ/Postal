@@ -140,7 +140,8 @@ function open_backwards_pauseless(i, inbox_count, k, printed_message)
 			-- No wait - pauseless processing
 			return open_backwards_pauseless(i, inbox_count, k, printed_message)
 		else
-			-- Empty mail, complete
+			-- Empty mail, delete it and move on
+			DeleteInboxItem(i)
 			return k()
 		end
 	end)
